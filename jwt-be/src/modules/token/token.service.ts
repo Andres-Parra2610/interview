@@ -1,27 +1,45 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTokenDto } from './dto/create-token.dto';
-import { UpdateTokenDto } from './dto/update-token.dto';
 import { Token } from './entities/token.entity';
 import { InjectModel } from '@nestjs/sequelize';
+import { IJwtPayload } from './interface';
+import { JwtService } from '@nestjs/jwt';
+import { ErrorResponse } from 'src/core/exceptions/interface';
 
 @Injectable()
 export class TokenService {
 
-  constructor(@InjectModel(Token) private jwtModel: typeof Token) { }
+  constructor(
+    @InjectModel(Token) private tokenModel: typeof Token,
+    private jwtService: JwtService,
+  ) { }
 
-  create(createJwtDto: CreateTokenDto) {
-    return 'this action adds a new jwt';
+  async signToken(payload: IJwtPayload) {
+    return this.jwtService.signAsync(payload)
   }
 
-  find() {
-    return `This action returns all jwt`;
+  async findToken(token: string) {
+    const dbToken = await this.tokenModel.findOne({ where: { token } })
+
+    if (!dbToken) {
+      throw new ErrorResponse({
+        message: 'Token no encontrado',
+        statusCode: 404
+      })
+    }
+
+    return {
+      message: 'Token verificado correctamente'
+    }
+
   }
 
-  update(id: number, updateJwtDto: UpdateTokenDto) {
-    return `This action updates a #${id} jwt`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} jwt`;
+  async create(createJwtDto: CreateTokenDto) {
+    const token = await this.signToken(createJwtDto);
+    await this.tokenModel.create({ token })
+    return {
+      token,
+      userName: createJwtDto.userName
+    }
   }
 }

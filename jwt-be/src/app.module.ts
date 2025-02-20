@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TokenModule } from './modules/token/token.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { DATABASE_ENTITIES } from './core/database/entities';
+import { ExceptionError } from './core/exceptions/exception-error';
 
 @Module({
   imports: [
@@ -18,5 +19,8 @@ import { DATABASE_ENTITIES } from './core/database/entities';
     }),
     TokenModule,
   ],
+  providers: [
+    ExceptionError
+  ]
 })
 export class AppModule { }

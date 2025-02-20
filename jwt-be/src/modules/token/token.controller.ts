@@ -1,25 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { TokenService } from './token.service';
 import { CreateTokenDto } from './dto/create-token.dto';
-import { UpdateTokenDto } from './dto/update-token.dto';
+import { Headers } from '@nestjs/common';
+import { extractTokenFromHeader } from './helpers';
 
 @Controller('token')
 export class TokenController {
-  constructor(private readonly jwtService: TokenService) { }
+  constructor(private readonly tokenService: TokenService) { }
 
   @Post()
   create(@Body() createJwtDto: CreateTokenDto) {
-    return this.jwtService.create(createJwtDto);
+    return this.tokenService.create(createJwtDto);
   }
 
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateJwtDto: UpdateTokenDto) {
-    return this.jwtService.update(+id, updateJwtDto);
+  @Get('verify')
+  verify(@Headers() headers: Headers) {
+    const token = extractTokenFromHeader(headers);
+    return this.tokenService.findToken(token);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.jwtService.remove(+id);
-  }
 }

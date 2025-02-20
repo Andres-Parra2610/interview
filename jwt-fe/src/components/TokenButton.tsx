@@ -24,7 +24,6 @@ const TokenButtons: React.FC<TokenButtonsProps> = ({ inputRef }) => {
 
   const onVerify = async () => {
     const token = getLocalStorage<string>('token');
-    console.log(token);
     if (!token) {
       toast.error('No hay token almacenado');
       return;
@@ -55,7 +54,7 @@ const TokenButtons: React.FC<TokenButtonsProps> = ({ inputRef }) => {
     <div className='buttons'>
       <button onClick={onSubmit}>Generar token</button>
       <button onClick={onVerify}>Verificar token</button>
-      <button onClick={onDelete}>Eliminar token</button>
+      <button className='btn-delete' onClick={onDelete}>Eliminar token</button>
     </div>
   );
 };

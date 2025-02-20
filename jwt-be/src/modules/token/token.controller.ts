@@ -17,14 +17,12 @@ export class TokenController {
   @Get('verify')
   verify(@Headers() headers: Headers) {
     const token = extractTokenFromHeader(headers);
-    console.log(token, 'verify');
     return this.tokenService.verifytoken(token);
   }
 
   @Delete()
   delete(@Headers() headers: Headers) {
     const token = extractTokenFromHeader(headers);
-    console.log(token, 'delete');
     return this.tokenService.deleteToken(token);
   }
 

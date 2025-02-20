@@ -4,15 +4,15 @@ import { TokenController } from './token.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Token } from './entities/token.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { env } from 'src/config/env';
 
-export const JWT_SECRET = 'this is a secret';
 
 @Module({
   imports: [
     SequelizeModule.forFeature([Token]),
     JwtModule.register({
       global: true,
-      secret: JWT_SECRET,
+      secret: env.JWT_SECRET,
     })
   ],
   controllers: [TokenController],

@@ -1,0 +1,22 @@
+services:
+  jwt-be:
+    build: ./jwt-be
+    ports:
+      - 3000:3000
+    volumes:
+      - ./jwt-be/src:/usr/src/app/src
+    command: pnpm run start:dev
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.4.4
+    restart: always
+    environment:
+      # This should be in .env file
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: jwt
+    ports:
+      - 3306:3306
+    volumes:
+      - ./jwt-be/data:/var/lib/mysql

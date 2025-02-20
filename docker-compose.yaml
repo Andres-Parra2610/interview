@@ -9,6 +9,16 @@ services:
     depends_on:
       - db
 
+  jwt-fe:
+    build: ./jwt-fe
+    ports:
+      - 8080:8080
+    volumes:
+      - ./jwt-fe/src:/usr/src/app/src
+    command: pnpm run dev
+    depends_on:
+      - jwt-be
+
   db:
     image: mysql:8.4.4
     restart: always

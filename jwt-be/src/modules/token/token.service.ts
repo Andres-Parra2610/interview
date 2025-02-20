@@ -18,28 +18,41 @@ export class TokenService {
     return this.jwtService.signAsync(payload)
   }
 
-  async findToken(token: string) {
-    const dbToken = await this.tokenModel.findOne({ where: { token } })
-
-    if (!dbToken) {
-      throw new ErrorResponse({
-        message: 'Token no encontrado',
-        statusCode: 404
-      })
-    }
-
+  async verifytoken(token: string) {
+    await this.findToken(token)
     return {
+      statusCode: 200,
       message: 'Token verificado correctamente'
     }
-
   }
 
-  async create(createJwtDto: CreateTokenDto) {
+  async createToken(createJwtDto: CreateTokenDto) {
     const token = await this.signToken(createJwtDto);
     await this.tokenModel.create({ token })
     return {
       token,
       userName: createJwtDto.userName
     }
+  }
+
+  async findToken(token: string) {
+    const dbToken = await this.tokenModel.findOne({ where: { token } })
+    if (!dbToken) {
+      throw new ErrorResponse({
+        message: 'Token no encontrado',
+        statusCode: 404
+      })
+    }
+    return dbToken
+  }
+
+  async deleteToken(token: string) {
+    const dbToken = await this.findToken(token)
+    await this.tokenModel.destroy({ where: { token: dbToken.token } })
+    return {
+      statusCode: 200,
+      message: 'Token eliminado correctamente'
+    }
+
   }
 }

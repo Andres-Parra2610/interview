@@ -37,3 +37,19 @@ export const verifyToken = async <T>(token: string): Promise<IResponse<T>> => {
     return { success: false, message: 'Error de conexión' };
   }
 }
+
+export const deleteToken = async <T>(token: string): Promise<IResponse<T>> => {
+  try {
+    const response = await fetch(`${API_URL}/token`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    return handleResponse(response, 'Token eliminado correctamente');
+  } catch (_) {
+    return { success: false, message: 'Error de conexión' };
+  }
+}

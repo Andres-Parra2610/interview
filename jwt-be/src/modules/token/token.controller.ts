@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete } from '@nestjs/common';
 import { TokenService } from './token.service';
 import { CreateTokenDto } from './dto/create-token.dto';
 import { Headers } from '@nestjs/common';
@@ -10,14 +10,22 @@ export class TokenController {
 
   @Post()
   create(@Body() createJwtDto: CreateTokenDto) {
-    return this.tokenService.create(createJwtDto);
+    return this.tokenService.createToken(createJwtDto);
   }
 
 
   @Get('verify')
   verify(@Headers() headers: Headers) {
     const token = extractTokenFromHeader(headers);
-    return this.tokenService.findToken(token);
+    console.log(token, 'verify');
+    return this.tokenService.verifytoken(token);
+  }
+
+  @Delete()
+  delete(@Headers() headers: Headers) {
+    const token = extractTokenFromHeader(headers);
+    console.log(token, 'delete');
+    return this.tokenService.deleteToken(token);
   }
 
 }

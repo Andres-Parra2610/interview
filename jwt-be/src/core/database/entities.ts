@@ -1,7 +1,7 @@
-import { Jwt } from '../../modules/jwt/entities/jwt.entity'
+import { Token } from '../../modules/token/entities/token.entity'
 
 
 
 export const DATABASE_ENTITIES = [
-  Jwt
+  Token
 ]

@@ -5,7 +5,7 @@ import { ExceptionError } from './core/exceptions/exception-error';
 import { env } from './config/env';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
   }));
